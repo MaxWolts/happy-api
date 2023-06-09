@@ -24,12 +24,8 @@ const options: CorsOptions = {
   },
 };
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../index.html"));
-});
-
 app.get("/api", (req, res) => {
-  res.send("hello world");
+  res.sendFile(path.join(__dirname, "../index.html"));
 });
 
 app.listen(port, () => {
