@@ -1,4 +1,5 @@
 import boom from "@hapi/boom";
+import { sequelize } from "../libs/sequelize";
 import type { Pool } from "pg";
 import { pool } from "../libs/postgres.pool";
 
@@ -22,8 +23,8 @@ export class ProductsService {
   async create() {}
   async find() {
     const query = "SELECT * FROM products";
-    const rta = await this.pool.query(query);
-    return rta.rows;
+    const [data] = await sequelize.query(query);
+    return data;
   }
   async findOne(id: string) {
     const product = this.products.filter((product) => product.id === id);
