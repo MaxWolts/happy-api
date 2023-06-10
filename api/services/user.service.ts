@@ -1,5 +1,6 @@
 import boom from "@hapi/boom";
 import type { Pool } from "pg";
+import { sequelize } from "../libs/sequelize";
 import { pool } from "../libs/postgres.pool";
 
 export class UserService {
@@ -13,9 +14,8 @@ export class UserService {
   }
 
   async find() {
-    const query = "SELECT * FROM users";
-    const rta = await this.pool.query(query);
-    return rta.rows;
+    const rta = await sequelize.models.User.findAll();
+    return rta;
   }
 
   async findOne(id: any) {
