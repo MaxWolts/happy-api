@@ -1,4 +1,6 @@
 import boom from "@hapi/boom";
+import type { Pool } from "pg";
+import { pool } from "../libs/postgres.pool";
 
 type Product = {
   id: string;
@@ -7,35 +9,21 @@ type Product = {
   description: string;
   image: string;
   category: string[];
-}
-
-const example: Product[] = [
-  {
-    id: "1",
-    name: "a",
-    price: 12,
-    description: "aaa",
-    image: "as",
-    category: ["dd"],
-  },
-  {
-    id: "2",
-    name: "a",
-    price: 12,
-    description: "aaa",
-    image: "as",
-    category: ["dd"],
-  },
-];
+};
 
 export class ProductsService {
   products: Product[];
+  pool: Pool;
   constructor() {
-    this.products = example;
+    this.products = [];
+    this.pool = pool;
+    this.pool.on("error", (err) => console.error(err));
   }
   async create() {}
   async find() {
-    return this.products;
+    const query = "SELECT * FROM products";
+    const rta = await this.pool.query(query);
+    return rta.rows;
   }
   async findOne(id: string) {
     const product = this.products.filter((product) => product.id === id);
