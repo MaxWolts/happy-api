@@ -1,12 +1,16 @@
 import express from "express";
-import { UserService } from './../services/user.service';
-import { validatorHandler } from './../middlewares/validator.handler';
-import { updateUserSchema, createUserSchema, getUserSchema } from './../schemas/user.schema';
+import { UserService } from "./../services/user.service";
+import { validatorHandler } from "./../middlewares/validator.handler";
+import {
+  updateUserSchema,
+  createUserSchema,
+  getUserSchema,
+} from "./../schemas/user.schema";
 
 const router = express.Router();
 const service = new UserService();
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await service.find();
     res.json(users);
@@ -15,8 +19,9 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id',
-  validatorHandler(getUserSchema, 'params'),
+router.get(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -28,8 +33,9 @@ router.get('/:id',
   }
 );
 
-router.post('/',
-  validatorHandler(createUserSchema, 'body'),
+router.post(
+  "/",
+  validatorHandler(createUserSchema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
@@ -41,9 +47,10 @@ router.post('/',
   }
 );
 
-router.patch('/:id',
-  validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'),
+router.patch(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
+  validatorHandler(updateUserSchema, "body"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -56,13 +63,14 @@ router.patch('/:id',
   }
 );
 
-router.delete('/:id',
-  validatorHandler(getUserSchema, 'params'),
+router.delete(
+  "/:id",
+  validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({id});
+      const deleted = await service.delete(id);
+      res.status(201).json({ deleted });
     } catch (error) {
       next(error);
     }
