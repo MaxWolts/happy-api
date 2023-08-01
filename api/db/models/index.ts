@@ -5,7 +5,7 @@ import { Category, CategorySchema } from "./category.model";
 import type { Sequelize } from "sequelize";
 
 /*
-- obtein the conecction
+- obtain the connection
 - make the initial configuration
 */
 function setupModels(sequelize: Sequelize) {

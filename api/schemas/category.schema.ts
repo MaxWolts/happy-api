@@ -8,8 +8,8 @@ const createCategorySchema = Joi.object({
 });
 
 const updateCategorySchema = Joi.object({
-  id: id.required(),
-  name: name,
+  id: id,
+  name: name.required(),
 });
 
 const getCategorySchema = Joi.object({

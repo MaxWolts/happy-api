@@ -4,7 +4,7 @@ const id = Joi.number().integer();
 const user_id = Joi.number().integer();
 const productsSchema = Joi.object({
   id: Joi.string().required(),
-  cantidad: Joi.number().integer().min(0).required(),
+  quantity: Joi.number().integer().min(0).required(),
 });
 const products = Joi.array().items(productsSchema);
 

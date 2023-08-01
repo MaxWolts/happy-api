@@ -11,7 +11,7 @@ const sequelize = new Sequelize(URI, {
   logging: true,
 });
 
-//send de conecction
+//send de connection
 setupModels(sequelize);
 
 //make a synchronization and creates the tables
