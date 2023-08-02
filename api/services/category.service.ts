@@ -1,8 +1,12 @@
 import boom from "@hapi/boom";
+import {pool} from '../libs/postgres.pool'
+import type { Pool } from "pg";
 
 export class CategoryService {
-  // constructor() {
-  // }
+  pool: Pool;
+  constructor() {
+    this.pool = pool;
+  }
   // async create(data) {
   //   return data;
   // }

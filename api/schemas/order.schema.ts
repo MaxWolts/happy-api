@@ -8,7 +8,7 @@ const productsSchema = Joi.object({
 });
 const products = Joi.array().items(productsSchema);
 
-const createUserSchema = Joi.object({
+const createOrderSchema = Joi.object({
   user_id: user_id.required(),
   products: products.required(),
 });
@@ -20,4 +20,4 @@ const getOrdersByUserSchema = Joi.object({
   user_id: user_id.required(),
 });
 
-export { createUserSchema, getOrderSchema, getOrdersByUserSchema };
+export { createOrderSchema, getOrderSchema, getOrdersByUserSchema };
