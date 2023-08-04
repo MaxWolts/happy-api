@@ -9,10 +9,10 @@ const OrderSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  name: {
+  userId: {
     allowNull: false,
-    type: DataTypes.STRING,
-    unique: true,
+    type: DataTypes.INTEGER,
+    field: "user_id",
   },
   createdAt: {
     allowNull: false,

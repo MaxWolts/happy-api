@@ -6,7 +6,6 @@ import { createOrderSchema, getOrderSchema, getOrdersByUserSchema } from "../sch
 export const router = express.Router();
 const services = new OrderService();
 
-
 router.get("/", async (req, res) => {
   const { limit, offset } = req.query;
   if (limit && offset) {
@@ -15,3 +14,15 @@ router.get("/", async (req, res) => {
     res.json(await services.find());
   }
 });
+router.post("/",
+  validatorHandler(createOrderSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newOrder = await services.create(body);
+      res.status(201).json(newOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
