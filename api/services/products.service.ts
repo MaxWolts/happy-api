@@ -1,7 +1,9 @@
 import boom from "@hapi/boom";
 import { sequelize } from "../libs/sequelize";
-import type { Pool } from "pg";
 import { pool } from "../libs/postgres.pool";
+import type { Pool } from "pg";
+
+const { models } = sequelize;
 
 type Product = {
   id: string;
@@ -20,22 +22,22 @@ export class ProductsService {
     this.pool = pool;
     this.pool.on("error", (err) => console.error(err));
   }
-  async create() {}
+  async create(data: Product) {
+    const newProduct = await models.Customer.create(data);
+    return newProduct;
+  }
   async find() {
     const query = "SELECT * FROM products";
     const [data] = await sequelize.query(query);
     return data;
   }
   async findOne(id: string) {
-    const product = this.products.filter((product) => product.id === id);
-    if (product.length) {
-      return product;
-    } else {
-      console.log('u');
-
+    const product = await models.Product.findByPk(id);
+    if (!product) {
       throw boom.notFound("product not found");
     }
+    return product;
   }
-  async update() {}
-  async delete() {}
+  // async update() {}
+  // async delete() {}
 }

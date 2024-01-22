@@ -1,6 +1,6 @@
 import boom from "@hapi/boom";
 import { sequelize } from "../libs/sequelize";
-import {pool} from '../libs/postgres.pool'
+import { pool } from "../libs/postgres.pool";
 import type { Pool } from "pg";
 
 const { models } = sequelize;
@@ -12,9 +12,9 @@ type OrderBody = {
 
 export class OrderService {
   pool: Pool;
-  constructor(){
+  constructor() {
     this.pool = pool;
-    this.pool.on('error', (err: Error) => console.log(err));
+    this.pool.on("error", (err: Error) => console.log(err));
   }
   async create(body: OrderBody) {
     const newOrderUser = await models.Order.create(body);

@@ -40,4 +40,4 @@ class Order extends Model {
   }
 }
 
-export { ORDER_TABLE, OrderSchema, Order }
+export { ORDER_TABLE, OrderSchema, Order };

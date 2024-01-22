@@ -5,7 +5,7 @@ import {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
-} from "../schemas/products.schemas";
+} from "../schemas/products.schema";
 
 export const router = express.Router();
 const services = new ProductsService();

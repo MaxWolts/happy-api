@@ -2,6 +2,7 @@ import express from "express";
 import { router as productsRouter } from "./products.router";
 import { router as usersRouter } from "./users.router";
 import { router as orderRouter } from "./orders.router";
+import { router as customerRouter } from "./customers.router";
 import type { Express } from "express";
 
 export const routerApi = (app: Express) => {
@@ -10,4 +11,5 @@ export const routerApi = (app: Express) => {
   router.use("/products", productsRouter);
   router.use("/orders", orderRouter);
   router.use("/users", usersRouter);
+  router.use("/customers", customerRouter);
 };
