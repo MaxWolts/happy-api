@@ -5,6 +5,7 @@ import {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
+  addCategorySchema,
 } from "../schemas/products.schema";
 
 export const router = express.Router();
@@ -18,9 +19,16 @@ router.get("/", async (req, res) => {
     res.json(await services.find());
   }
 });
-router.get("/filter", (req, res) => {
-  res.send("soy un filter");
+
+router.get("/add-category", async (req, res, next) => {
+  try {
+    const productCategory = await services.getProductCategory();
+    res.json(productCategory);
+  } catch (error) {
+    next(error);
+  }
 });
+
 router.get(
   "/:id",
   validatorHandler(getProductSchema, "params"),
@@ -34,19 +42,39 @@ router.get(
   }
 );
 
-router.post("/", validatorHandler(createProductSchema, "body"), (req, res) => {
-  const body = req.body;
-  res.json({
-    message: "created",
-    data: body,
-  });
-});
+router.post(
+  "/",
+  validatorHandler(createProductSchema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newProduct = await services.create(body);
+      res.status(201).json(newProduct);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  "/add-category",
+  validatorHandler(addCategorySchema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCategory = await services.addCategory(body);
+      res.status(201).json(newCategory);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.patch(
   "/",
   validatorHandler(getProductSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
-  (req, res) => {
+  async (req, res) => {
     const body = req.body;
     res.json({
       message: "updated",

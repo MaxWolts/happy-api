@@ -3,6 +3,10 @@ import { Product, ProductSchema } from "./product.model";
 import { Order, OrderSchema } from "./order.model";
 import { Category, CategorySchema } from "./category.model";
 import { Customer, CustomerSchema } from "./customer.model";
+import {
+  ProductCategory,
+  ProductCategorySchema,
+} from "./product-category.model";
 import type { Sequelize } from "sequelize";
 
 /*
@@ -15,9 +19,15 @@ function setupModels(sequelize: Sequelize) {
   Category.init(CategorySchema, Category.config(sequelize));
   Product.init(ProductSchema, Product.config(sequelize));
   Order.init(OrderSchema, Order.config(sequelize));
+  ProductCategory.init(
+    ProductCategorySchema,
+    ProductCategory.config(sequelize)
+  );
 
   User.associate(sequelize);
   Customer.associate(sequelize);
+  Category.associate(sequelize);
+  Product.associate(sequelize);
 }
 
 export { setupModels };

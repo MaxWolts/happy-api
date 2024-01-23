@@ -2,7 +2,6 @@ import boom from "@hapi/boom";
 import type { Pool } from "pg";
 import { sequelize } from "../libs/sequelize";
 import { pool } from "../libs/postgres.pool";
-import { UniqueConstraintError } from "sequelize"
 import type { Request } from "express";
 type UserBody = {
   email: string;

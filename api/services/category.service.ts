@@ -1,32 +1,44 @@
 import boom from "@hapi/boom";
-import {pool} from '../libs/postgres.pool'
-import type { Pool } from "pg";
+import { sequelize } from "../libs/sequelize";
+
+const { models } = sequelize;
+type CategoryData = {
+  name?: string;
+  image?: string;
+};
 
 export class CategoryService {
-  pool: Pool;
-  constructor() {
-    this.pool = pool;
+  async find() {
+    const rta = await models.Category.findAll({
+      include: ["products"],
+    });
+    return rta;
   }
-  // async create(data) {
-  //   return data;
-  // }
 
-  // async find() {
-  //   return [];
-  // }
+  async findOne(id: string) {
+    const category = await models.Category.findByPk(id, {
+      include: ["products"],
+    });
+    if (!category) {
+      throw boom.notFound("category not found");
+    }
+    return category;
+  }
 
-  // async findOne(id) {
-  //   return { id };
-  // }
+  async create(data: CategoryData) {
+    const newCategory = await models.Category.create(data);
+    return newCategory;
+  }
 
-  // async update(id, changes) {
-  //   return {
-  //     id,
-  //     changes,
-  //   };
-  // }
+  async update(id: string, changes: CategoryData) {
+    const model = await this.findOne(id);
+    const rta = await model.update(changes);
+    return rta;
+  }
 
-  // async delete(id) {
-  //   return { id };
-  // }
-};
+  async delete(id: string) {
+    const model = await this.findOne(id);
+    await model.destroy();
+    return { rta: true };
+  }
+}

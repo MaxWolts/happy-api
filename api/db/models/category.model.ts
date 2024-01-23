@@ -14,19 +14,25 @@ const CategorySchema = {
     type: DataTypes.STRING,
     unique: true,
   },
+  image: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: "create_at",
-    defaultValue: Sequelize.fn("NOW")
+    defaultValue: Sequelize.fn("NOW"),
   },
 };
 
 class Category extends Model {
   static associate(sequelize: Sequelize) {
-    this.hasMany(sequelize.models.Item, {
+    this.belongsToMany(sequelize.models.Product, {
       as: "products",
+      through: sequelize.models.ProductCategory,
       foreignKey: "categoryId",
+      otherKey: "productId",
     });
   }
 
@@ -35,9 +41,9 @@ class Category extends Model {
       sequelize,
       tableName: CATEGORY_TABLE,
       modelName: "Category",
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-export { CATEGORY_TABLE, CategorySchema, Category }
+export { CATEGORY_TABLE, CategorySchema, Category };

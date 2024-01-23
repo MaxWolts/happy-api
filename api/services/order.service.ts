@@ -16,6 +16,7 @@ export class OrderService {
     this.pool = pool;
     this.pool.on("error", (err: Error) => console.log(err));
   }
+
   async create(body: OrderBody) {
     const newOrderUser = await models.Order.create(body);
     return newOrderUser;
@@ -43,5 +44,4 @@ export class OrderService {
   // async delete(id) {
   //   return { id };
   // }
-
-};
+}
