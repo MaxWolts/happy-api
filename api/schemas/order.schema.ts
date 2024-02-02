@@ -1,23 +1,32 @@
 import Joi from "joi";
 
 const id = Joi.number().integer();
-const user_id = Joi.number().integer();
-const productsSchema = Joi.object({
-  id: Joi.string().required(),
-  quantity: Joi.number().integer().min(0).required(),
-});
-const products = Joi.array().items(productsSchema);
+const customerId = Joi.number().integer();
+const orderId = Joi.number().integer();
+const productId = Joi.number().integer();
+const amount = Joi.number().integer();
 
 const createOrderSchema = Joi.object({
-  user_id: user_id.required(),
-  products: products.required(),
+  customerId: customerId.required(),
 });
 
 const getOrderSchema = Joi.object({
   id: id.required(),
 });
+
 const getOrdersByUserSchema = Joi.object({
-  user_id: user_id.required(),
+  id: id.required(),
 });
 
-export { createOrderSchema, getOrderSchema, getOrdersByUserSchema };
+const addItemSchema = Joi.object({
+  orderId: orderId.required(),
+  productId: productId.required(),
+  amount: amount.required(),
+});
+
+export {
+  createOrderSchema,
+  getOrderSchema,
+  getOrdersByUserSchema,
+  addItemSchema,
+};

@@ -21,8 +21,8 @@ type ProductEdit = {
 };
 type CategoryData = {
   productId: string;
-  category: string;
-}
+  categoryId: string;
+};
 export class ProductsService {
   products: Product[];
   pool: Pool;
@@ -31,10 +31,24 @@ export class ProductsService {
     this.pool = pool;
     this.pool.on("error", (err) => console.error(err));
   }
+  // async create(data: Product) {
+  //   const newProduct: any = await models.Product.create(data);
+  //   data.categories.forEach(async (element) => {
+  //     await this.addCategory({ productId: newProduct.id, categoryId: element });
+  //   });
+  //   return await this.findOne(newProduct.id);
+  // }
   async create(data: Product) {
-    const newProduct = await models.Product.create(data);
-    return newProduct;
+    const newProduct: any = await models.Product.create(data);
+    for (const categoryId of data.categories) {
+      await this.addCategory({ productId: newProduct.id, categoryId });
+    }
+    return await this.findOne(newProduct.id);
   }
+  // data.categories.forEach(async (element) => {
+  //   await this.addCategory({ productId: newProduct.id, categoryId: element });
+  // });
+  // return await this.findOne(newProduct.id);
   async addCategory(data: CategoryData) {
     const newCategory = await models.ProductCategory.create(data);
     return newCategory;

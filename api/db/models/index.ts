@@ -7,6 +7,7 @@ import {
   ProductCategory,
   ProductCategorySchema,
 } from "./product-category.model";
+import { OrderProduct, OrderProductSchema } from "./order-product.model";
 import type { Sequelize } from "sequelize";
 
 /*
@@ -23,11 +24,13 @@ function setupModels(sequelize: Sequelize) {
     ProductCategorySchema,
     ProductCategory.config(sequelize)
   );
+  OrderProduct.init(OrderProductSchema, OrderProduct.config(sequelize));
 
   User.associate(sequelize);
   Customer.associate(sequelize);
   Category.associate(sequelize);
   Product.associate(sequelize);
+  Order.associate(sequelize);
 }
 
 export { setupModels };

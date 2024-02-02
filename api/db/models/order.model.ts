@@ -1,4 +1,5 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
+import { CUSTOMER_TABLE } from "./customer.model";
 
 const ORDER_TABLE = "orders";
 
@@ -9,10 +10,14 @@ const OrderSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  userId: {
+  customerId: {
+    field: "customer_id",
     allowNull: false,
     type: DataTypes.INTEGER,
-    field: "user_id",
+    references: {
+      model: CUSTOMER_TABLE,
+      key: "id",
+    },
   },
   createdAt: {
     allowNull: false,
@@ -24,9 +29,14 @@ const OrderSchema = {
 
 class Order extends Model {
   static associate(sequelize: Sequelize) {
-    this.hasMany(sequelize.models.Product, {
-      as: "products",
-      foreignKey: "categoryId",
+    this.belongsTo(sequelize.models.Customer, {
+      as: "customer",
+    });
+    this.belongsToMany(sequelize.models.Product, {
+      as: "items",
+      through: sequelize.models.OrderProduct,
+      foreignKey: "orderId",
+      otherKey: "productId",
     });
   }
 

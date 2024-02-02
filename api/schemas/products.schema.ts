@@ -7,10 +7,11 @@ const categoryId = Joi.number().integer();
 const productId = Joi.number().integer();
 const price = Joi.number().integer().min(2);
 const image = Joi.string().uri();
+const categories = Joi.array().items(Joi.number());
 
 const createProductSchema = Joi.object({
   name: name.required(),
-  category: categoryId.required(),
+  categories: categories.required(),
   description: description.required(),
   price: price.required(),
   image: image.required(),

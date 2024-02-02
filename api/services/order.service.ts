@@ -10,6 +10,12 @@ type OrderBody = {
   userId: string;
 };
 
+type ItemData = {
+  orderId: string;
+  productId: string;
+  amount: string;
+};
+
 export class OrderService {
   pool: Pool;
   constructor() {
@@ -30,9 +36,17 @@ export class OrderService {
     return orders;
   }
 
-  // async findOne(id) {
-  //   return { id };
-  // }
+  async findOne(id: string) {
+    const order = await models.Order.findByPk(id, {
+      include: [{ association: "customer", include: ["user"] }, "items"],
+    });
+    return order;
+  }
+
+  async addItem(data: ItemData) {
+    const newItem = await models.OrderProduct.create(data);
+    return newItem;
+  }
 
   // async update(id, changes) {
   //   return {
