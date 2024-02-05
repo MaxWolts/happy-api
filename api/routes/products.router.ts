@@ -6,19 +6,24 @@ import {
   updateProductSchema,
   getProductSchema,
   addCategorySchema,
+  queryProductSchema,
 } from "../schemas/products.schema";
 
 export const router = express.Router();
 const services = new ProductsService();
 
-router.get("/", async (req, res) => {
-  const { limit, offset } = req.query;
-  if (limit && offset) {
-    res.json(services.find());
-  } else {
-    res.json(await services.find());
+router.get(
+  "/",
+  validatorHandler(queryProductSchema, "query"),
+  async (req, res, next) => {
+    try {
+      const products = await services.find(req.query);
+      res.json(products);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get("/add-category", async (req, res, next) => {
   try {

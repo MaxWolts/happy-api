@@ -2,6 +2,7 @@ import boom from "@hapi/boom";
 import { sequelize } from "../libs/sequelize";
 import { pool } from "../libs/postgres.pool";
 import type { Pool } from "pg";
+import type { Request } from "express";
 
 const { models } = sequelize;
 
@@ -22,6 +23,12 @@ type ProductEdit = {
 type CategoryData = {
   productId: string;
   categoryId: string;
+};
+type Limit = number | undefined;
+type Offset = number | undefined;
+type Query = {
+  limit: Limit;
+  offset: Offset;
 };
 export class ProductsService {
   products: Product[];
@@ -57,10 +64,16 @@ export class ProductsService {
     const newProductCategory = await models.ProductCategory.findAll();
     return newProductCategory;
   }
-  async find() {
-    const products = await models.Product.findAll({
+  async find(query?: any) {
+    const { limit, offset } = query;
+    const options: { include: string[]; limit?: Limit; offset?: Offset } = {
       include: ["categories"],
-    });
+    };
+    if (limit && offset) {
+      options.limit = limit;
+      options.offset = offset;
+    }
+    const products = await models.Product.findAll(options);
     return products;
   }
   async findOne(id: string) {
