@@ -1,6 +1,7 @@
 import express from "express";
 import { ProductsService } from "../services/products.service";
 import { validatorHandler } from "../middlewares/validator.handler";
+import { checkApiKey } from "../middlewares/auth.handler";
 import {
   createProductSchema,
   updateProductSchema,
@@ -14,6 +15,7 @@ const services = new ProductsService();
 
 router.get(
   "/",
+  checkApiKey,
   validatorHandler(queryProductSchema, "query"),
   async (req, res, next) => {
     try {
@@ -25,14 +27,18 @@ router.get(
   }
 );
 
-router.get("/add-category", async (req, res, next) => {
-  try {
-    const productCategory = await services.getProductCategory();
-    res.json(productCategory);
-  } catch (error) {
-    next(error);
+router.get(
+  "/add-category",
+  validatorHandler(addCategorySchema),
+  async (req, res, next) => {
+    try {
+      const productCategory = await services.getProductCategory();
+      res.json(productCategory);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   "/:id",

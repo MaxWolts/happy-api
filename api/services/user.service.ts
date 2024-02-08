@@ -3,6 +3,8 @@ import type { Pool } from "pg";
 import { sequelize } from "../libs/sequelize";
 import { pool } from "../libs/postgres.pool";
 import type { Request } from "express";
+import bcryptjs from "bcryptjs";
+
 type UserBody = {
   email: string;
   password: string;
@@ -17,7 +19,12 @@ export class UserService {
   }
 
   async create(body: UserBody) {
-    const newUser = await models.User.create(body);
+    const hash = await bcryptjs.hash(body.password, 10);
+    const newUser = await models.User.create({
+      ...body,
+      password: hash,
+    });
+    delete newUser.dataValues.password;
     return newUser;
   }
 
