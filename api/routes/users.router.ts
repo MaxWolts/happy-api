@@ -1,4 +1,6 @@
 import express from "express";
+import passport from "passport";
+import { checkRoles } from "../middlewares/auth.handler";
 import { UserService } from "./../services/user.service";
 import { validatorHandler } from "./../middlewares/validator.handler";
 import {
@@ -35,6 +37,8 @@ router.get(
 
 router.post(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["customer", "admin"]),
   validatorHandler(createUserSchema, "body"),
   async (req, res, next) => {
     try {
@@ -49,6 +53,8 @@ router.post(
 
 router.patch(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getUserSchema, "params"),
   validatorHandler(updateUserSchema, "body"),
   async (req, res, next) => {
@@ -65,6 +71,8 @@ router.patch(
 
 router.delete(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getUserSchema, "params"),
   async (req, res, next) => {
     try {

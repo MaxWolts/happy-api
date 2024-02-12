@@ -1,4 +1,6 @@
 import express from "express";
+import passport from "passport";
+import { checkRoles } from "../middlewares/auth.handler";
 import { OrderService } from "../services/order.service";
 import { validatorHandler } from "../middlewares/validator.handler";
 import {
@@ -20,6 +22,8 @@ router.get("/", async (req, res) => {
 });
 router.get(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["customer", "admin"]),
   validatorHandler(getOrderSchema, "params"),
   async (req, res, next) => {
     try {
@@ -33,6 +37,8 @@ router.get(
 );
 router.post(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["customer", "admin"]),
   validatorHandler(createOrderSchema, "body"),
   async (req, res, next) => {
     try {
@@ -46,6 +52,8 @@ router.post(
 );
 router.post(
   "/add-item",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["customer", "admin"]),
   validatorHandler(addItemSchema, "body"),
   async (req, res, next) => {
     try {

@@ -1,6 +1,8 @@
 import express from "express";
+import passport from "passport";
 import { ProductsService } from "../services/products.service";
 import { validatorHandler } from "../middlewares/validator.handler";
+import { checkRoles } from "../middlewares/auth.handler";
 import { checkApiKey } from "../middlewares/auth.handler";
 import {
   createProductSchema,
@@ -55,6 +57,8 @@ router.get(
 
 router.post(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(createProductSchema, "body"),
   async (req, res, next) => {
     try {
@@ -69,6 +73,8 @@ router.post(
 
 router.post(
   "/add-category",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(addCategorySchema, "body"),
   async (req, res, next) => {
     try {
@@ -83,6 +89,8 @@ router.post(
 
 router.patch(
   "/",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getProductSchema, "params"),
   validatorHandler(updateProductSchema, "body"),
   async (req, res) => {
@@ -96,6 +104,8 @@ router.patch(
 
 router.delete(
   "/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getProductSchema, "params"),
   (req, res) => {
     const id = req.params;

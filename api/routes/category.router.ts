@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import { CategoryService } from "../services/category.service";
 import { validatorHandler } from "../middlewares/validator.handler";
+import { checkRoles } from "../middlewares/auth.handler";
 import {
   updateCategorySchema,
   createCategorySchema,
@@ -33,6 +34,7 @@ router.get("/:id", async (req, res, next) => {
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(createCategorySchema, "body"),
   async (req, res, next) => {
     try {
@@ -48,6 +50,7 @@ router.post(
 router.patch(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getCategorySchema, "params"),
   validatorHandler(updateCategorySchema, "body"),
   async (req, res, next) => {
@@ -65,6 +68,7 @@ router.patch(
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
+  checkRoles(["admin"]),
   validatorHandler(getCategorySchema, "params"),
   async (req, res, next) => {
     try {
