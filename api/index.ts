@@ -24,6 +24,8 @@ const options: CorsOptions = {
   },
 };
 
+require("./utils/auth");
+
 app.get("/api", (req, res) => {
   res.sendFile(path.join(__dirname, "../index.html"));
 });

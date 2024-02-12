@@ -38,6 +38,16 @@ export class UserService {
     return users;
   }
 
+  async findByEmail(email: string) {
+    const rta = await models.User.findOne({
+      where: { email },
+    });
+    if (!rta) {
+      throw boom.notFound("users not found");
+    }
+    return rta;
+  }
+
   async findOne(id: string) {
     const user = await models.User.findByPk(id);
     if (!user) {
