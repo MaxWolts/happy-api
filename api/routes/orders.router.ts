@@ -3,11 +3,7 @@ import passport from "passport";
 import { checkRoles } from "../middlewares/auth.handler";
 import { OrderService } from "../services/order.service";
 import { validatorHandler } from "../middlewares/validator.handler";
-import {
-  createOrderSchema,
-  getOrderSchema,
-  addItemSchema,
-} from "../schemas/order.schema";
+import { getOrderSchema, addItemSchema } from "../schemas/order.schema";
 
 export const router = express.Router();
 const services = new OrderService();
@@ -38,12 +34,10 @@ router.get(
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  checkRoles(["customer", "admin"]),
-  validatorHandler(createOrderSchema, "body"),
   async (req, res, next) => {
     try {
-      const body = req.body;
-      const newOrder = await services.create(body);
+      const user: any = req.user;
+      const newOrder = await services.create(user.sub);
       res.status(201).json(newOrder);
     } catch (error) {
       next(error);

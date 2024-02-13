@@ -5,11 +5,6 @@ import type { Pool } from "pg";
 
 const { models } = sequelize;
 
-type OrderBody = {
-  name: string;
-  userId: string;
-};
-
 type ItemData = {
   orderId: string;
   productId: string;
@@ -23,9 +18,14 @@ export class OrderService {
     this.pool.on("error", (err: Error) => console.log(err));
   }
 
-  async create(body: OrderBody) {
-    const newOrderUser = await models.Order.create(body);
-    return newOrderUser;
+  async create(id: string) {
+    const customer: any = await models.Customer.findOne({
+      where: { "$user.id$": id },
+      include: [{ association: "user" }],
+    });
+    const customerId = customer.id;
+    const newOrder = await models.Order.create({ customerId: customerId });
+    return newOrder;
   }
 
   async find() {
@@ -39,6 +39,18 @@ export class OrderService {
   async findOne(id: string) {
     const order = await models.Order.findByPk(id, {
       include: [{ association: "customer", include: ["user"] }, "items"],
+    });
+    return order;
+  }
+
+  async findByUser(id: string) {
+    console.log("id---", id);
+
+    const order = await models.Order.findAll({
+      where: {
+        "$customer.user.id$": id,
+      },
+      include: [{ association: "customer", include: ["user"] }],
     });
     return order;
   }

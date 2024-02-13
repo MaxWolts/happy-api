@@ -53,7 +53,9 @@ export class CustomerService {
         password: hash,
       },
     };
+
     const newCustomer = await models.Customer.create(newData, {
+
       include: [{ association: "user", attributes: { exclude: ["password"] } }],
     });
 
