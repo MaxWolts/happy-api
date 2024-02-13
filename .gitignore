@@ -134,6 +134,7 @@ out
 .nuxt
 dist
 public
+.env.development.local
 
 # Gatsby files
 .cache/

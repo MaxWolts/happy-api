@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "nodemon ./api/index.ts",
-    "start": "npm run build && node ./dist/index.js",
+    "start": "npm run build && node ./public/index.js",
     "lint": "eslint . --ext .ts",
     "build": "npx tsc"
   },
